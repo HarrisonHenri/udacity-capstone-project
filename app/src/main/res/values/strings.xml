@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Onyo Android Challenge</string>
+
+    <string name="distance_company_in_km">~%f km</string>
+
+    <string name="company_image_description">Logo da loja</string>
+</resources>
