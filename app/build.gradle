@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'androidx.navigation.safeargs.kotlin'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -54,7 +55,8 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-scalars:$retrofit_scalars_version"
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$retrofit_couroutines_version"
     implementation "com.squareup.picasso:picasso:$picasso_version"
-
+    implementation platform("com.google.firebase:firebase-bom:$firebase_version")
+    implementation("com.firebaseui:firebase-ui-auth:$firebase_ui_version")
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
