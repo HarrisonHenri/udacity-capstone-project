@@ -36,21 +36,21 @@
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
             android:contentDescription=""
-            app:layout_constraintEnd_toStartOf="@id/login_button"
+            app:layout_constraintEnd_toStartOf="@id/authentication_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/app_bar"
             tools:text="Shoppping Nova América" />
 
         <ImageView
-            android:id="@+id/login_button"
+            android:id="@+id/authentication_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_normal"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/app_bar"
-            android:src="@drawable/ic_baseline_person_24"
+            android:src="@{viewModel.isAuthenticated() ? @drawable/ic_baseline_directions_walk_24 : @drawable/ic_baseline_person_24}"
             />
 
         <androidx.recyclerview.widget.RecyclerView

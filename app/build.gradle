@@ -57,6 +57,7 @@ dependencies {
     implementation "com.squareup.picasso:picasso:$picasso_version"
     implementation platform("com.google.firebase:firebase-bom:$firebase_version")
     implementation("com.firebaseui:firebase-ui-auth:$firebase_ui_version")
+    implementation("com.google.firebase:firebase-auth-ktx")
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

@@ -7,9 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.firebase.ui.auth.AuthUI
 import com.harrisonhenri.myapplication.databinding.FragmentCompanyListBinding
+import com.harrisonhenri.myapplication.utils.Constants
 import com.harrisonhenri.myapplication.utils.Constants.SIGN_IN_REQUEST_CODE
 
 class CompanyList : Fragment() {
@@ -26,13 +29,30 @@ class CompanyList : Fragment() {
         binding.viewModel = viewModel
         binding.companyRecycler.adapter = CompanyListAdapter()
 
-        binding.loginButton.setOnClickListener {
-            val intent = viewModel.getLoginIntent()
+        viewModel.isAuthenticated.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                binding.authenticationButton.setOnClickListener {
+                    logoutCallback()
+                }
+            }
+            else {
+                binding.authenticationButton.setOnClickListener {
+                    loginCallback()
+                }
+            }
+        })
 
-            startActivityForResult(intent, SIGN_IN_REQUEST_CODE)
-        }
 
         return binding.root
+    }
+
+    private fun logoutCallback() {
+        AuthUI.getInstance().signOut(requireContext())
+    }
+
+    private fun loginCallback() {
+        val intent = viewModel.getLoginIntent()
+        startActivityForResult(intent, SIGN_IN_REQUEST_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

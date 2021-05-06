@@ -1,17 +1,18 @@
 package com.harrisonhenri.myapplication.companies
 
-import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.firebase.ui.auth.AuthUI
 import com.harrisonhenri.myapplication.api.network.Api
 import com.harrisonhenri.myapplication.api.parseCompaniesJsonResult
+import com.harrisonhenri.myapplication.authentication.FirebaseUserLiveData
 import com.harrisonhenri.myapplication.repository.models.Company
+import com.harrisonhenri.myapplication.utils.Constants
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
@@ -19,6 +20,10 @@ class CompanyListViewModel(application: Application): AndroidViewModel(applicati
     val companyList = MutableLiveData<List<Company>>()
     val showLoading = MutableLiveData<Boolean>(false)
     private val TAG = CompanyListViewModel::class.simpleName
+
+    val isAuthenticated = FirebaseUserLiveData().map { user ->
+        user != null
+    }
 
     init {
         viewModelScope.launch {
@@ -38,14 +43,16 @@ class CompanyListViewModel(application: Application): AndroidViewModel(applicati
     }
 
     fun getLoginIntent(): Intent {
-        val providers = arrayListOf(
-            AuthUI.IdpConfig.EmailBuilder().build(), AuthUI.IdpConfig.GoogleBuilder().build()
-        )
         return AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setLockOrientation(true)
-            .setAvailableProviders(providers)
+            .setAvailableProviders(buildAvaiableProviders())
             .setIsSmartLockEnabled(false)
             .build()
     }
+
+    private fun buildAvaiableProviders(): List<AuthUI.IdpConfig> = listOf(
+            AuthUI.IdpConfig.GoogleBuilder().build(),
+            AuthUI.IdpConfig.EmailBuilder().build()
+    )
 }
