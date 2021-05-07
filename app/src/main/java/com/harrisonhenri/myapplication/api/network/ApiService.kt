@@ -11,7 +11,7 @@ private val retrofit = Retrofit.Builder()
         .build()
 
 interface ApiService {
-        @GET("5/company")
+        @GET("brand/5/company")
         suspend fun getApiPayload(): String
 }
 

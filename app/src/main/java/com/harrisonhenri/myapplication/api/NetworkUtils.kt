@@ -1,6 +1,10 @@
 package com.harrisonhenri.myapplication.api
 
+import com.harrisonhenri.myapplication.repository.models.Category
 import com.harrisonhenri.myapplication.repository.models.Company
+import com.harrisonhenri.myapplication.repository.models.Menu
+import com.harrisonhenri.myapplication.utils.Constants.BASE_URL
+import org.json.JSONArray
 import org.json.JSONObject
 
 fun parseCompaniesJsonResult(jsonResult: JSONObject): ArrayList<Company> {
@@ -10,19 +14,68 @@ fun parseCompaniesJsonResult(jsonResult: JSONObject): ArrayList<Company> {
 
     for (i in 0 until companiesObjectsJson.length()) {
         val companyJson = companiesObjectsJson.getJSONObject(i)
-        val id = companyJson.getLong("numericalId")
+        val id = companyJson.getInt("numericalId")
         val name = companyJson.getString("name")
         val address = companyJson.getString("address")
+        val menuId = companyJson.getString("menu").replace(BASE_URL.plus("menu/"), "").toInt()
 
         val images = companyJson
             .getJSONArray("image").getJSONObject(0)
 
         val imageUrl = images.getString("url").replace("http:", "https:")
 
-        val company = Company(id, name, address, imageUrl)
+        val company = Company(id, name, address, imageUrl, menuId)
         companiesList.add(company)
     }
 
 
     return companiesList
+}
+
+fun parseMenuJsonResult(jsonResult: JSONObject): HashMap<Int, Menu> {
+    val menusObjectsJson = jsonResult.getJSONArray("menus")
+    val categoriesHash = parseCategoriesJsonResult(jsonResult.getJSONArray("categories"))
+
+    val menusHash = HashMap<Int, Menu>()
+
+    for (i in 0 until menusObjectsJson.length()) {
+        val menuJson = menusObjectsJson.getJSONObject(i)
+        val id = menuJson.getInt("numericalId")
+        val categoriesArray =  menuJson.getJSONArray("categories")
+        val categoriesList = ArrayList<Category>()
+
+        for (j in 0 until categoriesArray.length()){
+            val categoryId = categoriesArray.getString(j).replace(BASE_URL.plus("category/"), "").toInt()
+            val category = categoriesHash.get(categoryId) as Category
+            categoriesList.add(category)
+        }
+
+        menusHash[id] = Menu(id, categoriesList)
+    }
+
+
+    return menusHash
+}
+
+fun parseCategoriesJsonResult(categoriesObjectsJson: JSONArray): HashMap<Int, Category> {
+    val categoriesHash = HashMap<Int, Category>()
+
+    for (i in 0 until categoriesObjectsJson.length()) {
+        val categoryJson = categoriesObjectsJson.getJSONObject(i)
+        val id = categoryJson.getInt("numericalId")
+        val name = categoryJson.getString("name")
+
+        try {
+            val images = categoryJson
+                    .getJSONArray("image").getJSONObject(0)
+            val imageUrl = images.getString("url").replace("http:", "https:")
+
+            categoriesHash[id] = Category(id, name, imageUrl)
+        } catch (e: Exception){
+            categoriesHash[id] = Category(id, name, "")
+        }
+    }
+
+
+    return categoriesHash
 }

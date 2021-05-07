@@ -3,29 +3,35 @@ package com.harrisonhenri.myapplication.companies
 import android.app.Application
 import android.content.Intent
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.firebase.ui.auth.AuthUI
 import com.harrisonhenri.myapplication.api.network.Api
 import com.harrisonhenri.myapplication.api.parseCompaniesJsonResult
+import com.harrisonhenri.myapplication.api.parseMenuJsonResult
 import com.harrisonhenri.myapplication.authentication.FirebaseUserLiveData
 import com.harrisonhenri.myapplication.repository.models.Company
+import com.harrisonhenri.myapplication.repository.models.Menu
 import com.harrisonhenri.myapplication.utils.Constants
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class CompanyListViewModel(application: Application): AndroidViewModel(application) {
     val companyList = MutableLiveData<List<Company>>()
+    val menuHash = MutableLiveData<HashMap<Int, Menu>>()
     val showLoading = MutableLiveData<Boolean>(false)
     private val TAG = CompanyListViewModel::class.simpleName
+
+    private val _navigateToMenu = MutableLiveData<String>()
+
+    val navigateToMenu: LiveData<String>
+        get() = _navigateToMenu
 
     val isAuthenticated = FirebaseUserLiveData().map { user ->
         user != null
     }
 
     init {
+        _navigateToMenu.value = null
         viewModelScope.launch {
             getCompanyList()
         }
@@ -34,8 +40,9 @@ class CompanyListViewModel(application: Application): AndroidViewModel(applicati
     suspend fun getCompanyList(){
         showLoading.value = true
         try{
-            val companiesResult  = Api.apiService.getApiPayload()
-            companyList.value = parseCompaniesJsonResult(JSONObject(companiesResult))
+            val result  = Api.apiService.getApiPayload()
+            companyList.value = parseCompaniesJsonResult(JSONObject(result))
+            menuHash.value = parseMenuJsonResult(JSONObject(result))
         } catch (e: Exception){
             Log.i(TAG, e.message ?: "Api query fail")
         }
@@ -55,4 +62,8 @@ class CompanyListViewModel(application: Application): AndroidViewModel(applicati
             AuthUI.IdpConfig.GoogleBuilder().build(),
             AuthUI.IdpConfig.EmailBuilder().build()
     )
+
+    fun doneNavigation(){
+        _navigateToMenu.value = null
+    }
 }
