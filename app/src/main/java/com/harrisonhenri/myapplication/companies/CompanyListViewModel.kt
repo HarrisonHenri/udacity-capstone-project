@@ -18,12 +18,12 @@ import org.json.JSONObject
 class CompanyListViewModel(application: Application): AndroidViewModel(application) {
     val companyList = MutableLiveData<List<Company>>()
     val menuHash = MutableLiveData<HashMap<Int, Menu>>()
-    val showLoading = MutableLiveData<Boolean>(false)
+    val showLoading = MutableLiveData(false)
     private val TAG = CompanyListViewModel::class.simpleName
 
-    private val _navigateToMenu = MutableLiveData<String>()
+    private val _navigateToMenu = MutableLiveData<Menu>()
 
-    val navigateToMenu: LiveData<String>
+    val navigateToMenu: LiveData<Menu>
         get() = _navigateToMenu
 
     val isAuthenticated = FirebaseUserLiveData().map { user ->
@@ -65,5 +65,9 @@ class CompanyListViewModel(application: Application): AndroidViewModel(applicati
 
     fun doneNavigation(){
         _navigateToMenu.value = null
+    }
+
+    fun companyClicked(menuId: Int) {
+        _navigateToMenu.value = menuHash.value?.get(menuId)
     }
 }

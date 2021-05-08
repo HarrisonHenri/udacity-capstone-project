@@ -72,7 +72,7 @@ fun parseCategoriesJsonResult(categoriesObjectsJson: JSONArray): HashMap<Int, Ca
 
             categoriesHash[id] = Category(id, name, imageUrl)
         } catch (e: Exception){
-            categoriesHash[id] = Category(id, name, "")
+            categoriesHash[id] = Category(id, name, "https://images.onyo.com/LcuX3SFcXtRZB9xbopfL7NjdNbs=/0x0:450x480/fit-in/450x480/https://onyo.s3.amazonaws.com/picture/2d7b0782134945d8a92e8b76f6a1dc37.png")
         }
     }
 

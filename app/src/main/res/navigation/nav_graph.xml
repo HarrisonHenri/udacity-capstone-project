@@ -8,10 +8,9 @@
     <fragment
         android:id="@+id/company"
         android:name="com.harrisonhenri.myapplication.companies.CompanyList"
-        android:label="fragment_company"
         tools:layout="@layout/fragment_company_list" >
         <action
-            android:id="@+id/action_company_to_menu2"
+            android:id="@+id/action_company_to_menu"
             app:destination="@id/menu"
             app:enterAnim="@anim/fragment_fade_enter"
             app:exitAnim="@anim/fragment_fade_exit" />
@@ -19,7 +18,10 @@
     <fragment
         android:id="@+id/menu"
         android:name="com.harrisonhenri.myapplication.menu.Menu"
-        android:label="fragment_menu"
+        android:label="@string/menu"
         tools:layout="@layout/fragment_menu" >
+        <argument
+            android:name="Menu"
+            app:argType="com.harrisonhenri.myapplication.repository.models.Menu" />
     </fragment>
 </navigation>

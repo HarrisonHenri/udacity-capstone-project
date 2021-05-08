@@ -9,6 +9,10 @@
             name="company"
             type="com.harrisonhenri.myapplication.repository.models.Company" />
 
+        <variable
+            name="clickListener"
+            type="com.harrisonhenri.myapplication.companies.CompanyClickListener" />
+
     </data>
 
     <androidx.cardview.widget.CardView
@@ -28,11 +32,11 @@
                 android:layout_height="@dimen/company_image_height"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                app:companyImage="@{company.imageUrl}"
+                app:imageSource="@{company.imageUrl}"
                 android:contentDescription="@string/company_image_description"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@drawable/company_logo_placeholder" />
+                tools:srcCompat="@drawable/logo_placeholder" />
 
             <TextView
                 android:id="@+id/company_name"
@@ -74,6 +78,16 @@
                 app:layout_constraintTop_toBottomOf="@id/company_name"
                 app:layout_constraintStart_toStartOf="@id/company_name"
                 tools:text="Av São Paulo" />
+
+            <View
+                android:id="@+id/clickableOverlay"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:onClick="@{() -> clickListener.onClick(company.menuId)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

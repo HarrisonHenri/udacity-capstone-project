@@ -2,17 +2,16 @@ package com.harrisonhenri.myapplication.companies
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.firebase.ui.auth.AuthUI
 import com.harrisonhenri.myapplication.databinding.FragmentCompanyListBinding
-import com.harrisonhenri.myapplication.utils.Constants
 import com.harrisonhenri.myapplication.utils.Constants.SIGN_IN_REQUEST_CODE
 
 class CompanyList : Fragment() {
@@ -21,24 +20,33 @@ class CompanyList : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentCompanyListBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        binding.companyRecycler.adapter = CompanyListAdapter()
+        binding.companyRecycler.adapter = CompanyListAdapter(CompanyClickListener { menuId ->
+            viewModel.companyClicked(menuId)
+        })
 
         viewModel.isAuthenticated.observe(viewLifecycleOwner, Observer {
             if (it) {
                 binding.authenticationButton.setOnClickListener {
                     logoutCallback()
                 }
-            }
-            else {
+            } else {
                 binding.authenticationButton.setOnClickListener {
                     loginCallback()
                 }
+            }
+        })
+
+        viewModel.navigateToMenu.observe(viewLifecycleOwner, Observer { menu ->
+            menu?.let {
+                val action = CompanyListDirections.actionCompanyToMenu(menu)
+                NavHostFragment.findNavController(this).navigate(action)
+                viewModel.doneNavigation()
             }
         })
 
@@ -57,6 +65,15 @@ class CompanyList : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        findNavController().popBackStack()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
     }
 }

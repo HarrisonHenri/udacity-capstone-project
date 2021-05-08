@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.harrisonhenri.myapplication.databinding.CompanyItemBinding
 import com.harrisonhenri.myapplication.repository.models.Company
 
-class CompanyListAdapter: ListAdapter<Company, CompanyListAdapter.CompanyViewHolder>(DiffCallback) {
+class CompanyListAdapter(private val clickListener: CompanyClickListener): ListAdapter<Company, CompanyListAdapter.CompanyViewHolder>(DiffCallback) {
     companion object DiffCallback: DiffUtil.ItemCallback<Company>() {
         override fun areItemsTheSame(oldItem: Company, newItem: Company): Boolean {
             return oldItem === newItem
@@ -21,8 +21,9 @@ class CompanyListAdapter: ListAdapter<Company, CompanyListAdapter.CompanyViewHol
     }
 
     class CompanyViewHolder(private var binding: CompanyItemBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(company: Company) {
+        fun bind(company: Company, clickListener: CompanyClickListener) {
             binding.company = company
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
     }
@@ -33,6 +34,10 @@ class CompanyListAdapter: ListAdapter<Company, CompanyListAdapter.CompanyViewHol
 
     override fun onBindViewHolder(holder: CompanyViewHolder, position: Int) {
         val company = getItem(position)
-        holder.bind(company)
+        holder.bind(company, clickListener)
     }
+}
+
+class CompanyClickListener(val clickListener: (Int) -> Unit) {
+    fun onClick(menuId: Int) = clickListener(menuId)
 }

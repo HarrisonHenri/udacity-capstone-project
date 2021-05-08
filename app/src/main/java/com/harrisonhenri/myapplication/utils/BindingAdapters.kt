@@ -6,20 +6,23 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.harrisonhenri.myapplication.R
 import com.harrisonhenri.myapplication.companies.CompanyListAdapter
+import com.harrisonhenri.myapplication.menu.CategoryListAdapter
+import com.harrisonhenri.myapplication.repository.models.Category
 import com.harrisonhenri.myapplication.repository.models.Company
 import com.squareup.picasso.Picasso
 
 @BindingAdapter("companyList")
-fun bindRecyclerView(recyclerView: RecyclerView, companyList: List<Company>?) {
+fun bindCompanyRecyclerView(recyclerView: RecyclerView, companyList: List<Company>?) {
     val adapter = recyclerView.adapter as CompanyListAdapter
     adapter.submitList(companyList)
 }
 
-@BindingAdapter("companyImage")
-fun bindImageViewToCompanyImage(imageView: ImageView, url: String?) {
+@BindingAdapter("imageSource")
+fun bindImageViewImage(imageView: ImageView, url: String?) {
     Picasso.get().load(url)
-        .placeholder(R.drawable.company_logo_placeholder)
+        .placeholder(R.drawable.logo_placeholder)
         .into(imageView)
+
 }
 
 @BindingAdapter("android:fadeVisible")
@@ -37,4 +40,10 @@ fun setFadeVisible(view: View, visible: Boolean? = true) {
                 view.alpha = 0f
         }
     }
+}
+
+@BindingAdapter("categoriesList")
+fun bindMenuRecyclerView(recyclerView: RecyclerView, categoriesList: List<Category>?) {
+    val adapter = recyclerView.adapter as CategoryListAdapter
+    adapter.submitList(categoriesList)
 }

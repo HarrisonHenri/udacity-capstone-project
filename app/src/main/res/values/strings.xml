@@ -4,6 +4,8 @@
     <string name="distance_company_in_km">~%f km</string>
 
     <string name="company_image_description">Logo da loja</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="category_image_description">Imagem da categoria</string>
+
+    <string name="menu">MENU</string>
 </resources>
