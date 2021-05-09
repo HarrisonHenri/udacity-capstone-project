@@ -9,6 +9,8 @@ import com.harrisonhenri.myapplication.api.network.Api
 import com.harrisonhenri.myapplication.api.parseCompaniesJsonResult
 import com.harrisonhenri.myapplication.api.parseMenuJsonResult
 import com.harrisonhenri.myapplication.authentication.FirebaseUserLiveData
+import com.harrisonhenri.myapplication.data.getDatabase
+import com.harrisonhenri.myapplication.repository.CompanyRepository
 import com.harrisonhenri.myapplication.repository.models.Company
 import com.harrisonhenri.myapplication.repository.models.Menu
 import com.harrisonhenri.myapplication.utils.Constants
@@ -16,11 +18,10 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class CompanyListViewModel(application: Application): AndroidViewModel(application) {
-    val companyList = MutableLiveData<List<Company>>()
-    val menuHash = MutableLiveData<HashMap<Int, Menu>>()
+    private val database = getDatabase(application)
+    private val companyRepository = CompanyRepository(database)
     val showLoading = MutableLiveData(false)
     private val TAG = CompanyListViewModel::class.simpleName
-
     private val _navigateToMenu = MutableLiveData<Menu>()
 
     val navigateToMenu: LiveData<Menu>
@@ -30,24 +31,18 @@ class CompanyListViewModel(application: Application): AndroidViewModel(applicati
         user != null
     }
 
+
     init {
         _navigateToMenu.value = null
+        showLoading.value = true
         viewModelScope.launch {
-            getCompanyList()
+            companyRepository.getCompanies()
+            showLoading.postValue(false)
         }
     }
 
-    suspend fun getCompanyList(){
-        showLoading.value = true
-        try{
-            val result  = Api.apiService.getApiPayload()
-            companyList.value = parseCompaniesJsonResult(JSONObject(result))
-            menuHash.value = parseMenuJsonResult(JSONObject(result))
-        } catch (e: Exception){
-            Log.i(TAG, e.message ?: "Api query fail")
-        }
-        showLoading.value = false
-    }
+    val companyList = companyRepository.companyList
+    val menuHash = companyRepository.menuHash
 
     fun getLoginIntent(): Intent {
         return AuthUI.getInstance()
@@ -68,6 +63,7 @@ class CompanyListViewModel(application: Application): AndroidViewModel(applicati
     }
 
     fun companyClicked(menuId: Int) {
+        Log.i("a", menuHash.value.toString())
         _navigateToMenu.value = menuHash.value?.get(menuId)
     }
 }

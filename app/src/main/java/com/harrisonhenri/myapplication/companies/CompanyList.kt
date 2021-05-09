@@ -42,7 +42,7 @@ class CompanyList : Fragment() {
             }
         })
 
-        viewModel.navigateToMenu.observe(viewLifecycleOwner, Observer { menu ->
+        viewModel.navigateToMenu.observe(viewLifecycleOwner, { menu ->
             menu?.let {
                 val action = CompanyListDirections.actionCompanyToMenu(menu)
                 NavHostFragment.findNavController(this).navigate(action)
