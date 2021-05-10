@@ -31,7 +31,6 @@ $ git clone https://github.com/HarrisonHenri/location-reminder-app
 * [Data Binding](https://developer.android.com/topic/libraries/data-binding/) 
 * [Navigation](https://developer.android.com/topic/libraries/architecture/navigation/) 
 * [Espresso](https://developer.android.com/training/testing/espresso/) 
-* [Koin](https://insert-koin.io/) 
 
 ## Contributing
 
