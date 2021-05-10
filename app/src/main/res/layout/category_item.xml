@@ -18,8 +18,10 @@
         android:layout_margin="@dimen/margin_small"
         android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.motion.widget.MotionLayout
             android:layout_width="match_parent"
+            app:layoutDescription="@xml/category_item_scene"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_height="wrap_content">
 
             <ImageView
@@ -48,7 +50,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/category_logo"
                 tools:text="Entradas" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.motion.widget.MotionLayout>
 
     </androidx.cardview.widget.CardView>
 
