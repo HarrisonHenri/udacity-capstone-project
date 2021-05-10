@@ -21,6 +21,7 @@ buildscript {
         firebase_version = "26.6.0"
         firebase_ui_version = "7.1.1"
         room_version = "2.2.5"
+        play_services_version = "17.0.0"
     }
     repositories {
         google()

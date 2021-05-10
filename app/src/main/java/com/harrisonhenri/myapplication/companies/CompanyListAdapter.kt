@@ -1,14 +1,17 @@
 package com.harrisonhenri.myapplication.companies
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.maps.model.LatLng
 import com.harrisonhenri.myapplication.databinding.CompanyItemBinding
 import com.harrisonhenri.myapplication.repository.models.Company
+import com.harrisonhenri.myapplication.utils.getDistanceLatLonKm
 
-class CompanyListAdapter(private val clickListener: CompanyClickListener): ListAdapter<Company, CompanyListAdapter.CompanyViewHolder>(DiffCallback) {
+class CompanyListAdapter(private val userLatLong: LatLng?, private val clickListener: CompanyClickListener): ListAdapter<Company, CompanyListAdapter.CompanyViewHolder>(DiffCallback) {
     companion object DiffCallback: DiffUtil.ItemCallback<Company>() {
         override fun areItemsTheSame(oldItem: Company, newItem: Company): Boolean {
             return oldItem === newItem
@@ -21,8 +24,10 @@ class CompanyListAdapter(private val clickListener: CompanyClickListener): ListA
     }
 
     class CompanyViewHolder(private var binding: CompanyItemBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(company: Company, clickListener: CompanyClickListener) {
+        fun bind(company: Company, clickListener: CompanyClickListener, userLatLong: LatLng?) {
+            val companyLatLng = LatLng(company.geoLat, company.geoLon)
             binding.company = company
+            binding.distance = getDistanceLatLonKm(companyLatLng, userLatLong)
             binding.clickListener = clickListener
             binding.executePendingBindings()
         }
@@ -34,7 +39,7 @@ class CompanyListAdapter(private val clickListener: CompanyClickListener): ListA
 
     override fun onBindViewHolder(holder: CompanyViewHolder, position: Int) {
         val company = getItem(position)
-        holder.bind(company, clickListener)
+        holder.bind(company, clickListener, userLatLong)
     }
 }
 

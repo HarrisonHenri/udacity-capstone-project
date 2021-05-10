@@ -10,7 +10,9 @@ fun List<CompanyEntity>.toDomainModel():List<Company> {
             name = companyEntity.name,
             address = companyEntity.address,
             imageUrl = companyEntity.imageUrl,
-            menuId = companyEntity.menuId
+            menuId = companyEntity.menuId,
+            geoLat = companyEntity.geoLat,
+            geoLon = companyEntity.geoLon
         )
     }
 }
@@ -22,7 +24,9 @@ fun ArrayList<Company>.toDatabaseModel():Array<CompanyEntity> {
                 name = company.name,
                 address = company.address,
                 imageUrl = company.imageUrl,
-                menuId = company.menuId
+                menuId = company.menuId,
+                geoLat = company.geoLat,
+                geoLon = company.geoLon
         )
     }.toTypedArray()
 }

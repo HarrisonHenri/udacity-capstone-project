@@ -13,6 +13,10 @@
             name="clickListener"
             type="com.harrisonhenri.myapplication.companies.CompanyClickListener" />
 
+        <variable
+            name="distance"
+            type="com.harrisonhenri.myapplication.repository.models.Distance" />
+
     </data>
 
     <androidx.cardview.widget.CardView
@@ -58,7 +62,7 @@
                 android:id="@+id/company_distance"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="250m"
+                android:text="@{distance.value}"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/text_size_medium"

@@ -1,5 +1,6 @@
 package com.harrisonhenri.myapplication.api
 
+import android.location.Location
 import com.harrisonhenri.myapplication.repository.models.Category
 import com.harrisonhenri.myapplication.repository.models.Company
 import com.harrisonhenri.myapplication.repository.models.Menu
@@ -17,6 +18,8 @@ fun parseCompaniesJsonResult(jsonResult: JSONObject): ArrayList<Company> {
         val id = companyJson.getInt("numericalId")
         val name = companyJson.getString("name")
         val address = companyJson.getString("address")
+        val geoLat = companyJson.getString("geoLat").toDouble()
+        val geoLon = companyJson.getString("geoLon").toDouble()
         val menuId = companyJson.getString("menu").replace(BASE_URL.plus("menu/"), "").toInt()
 
         val images = companyJson
@@ -24,7 +27,9 @@ fun parseCompaniesJsonResult(jsonResult: JSONObject): ArrayList<Company> {
 
         val imageUrl = images.getString("url").replace("http:", "https:")
 
-        val company = Company(id, name, address, imageUrl, menuId)
+
+        val company = Company(id, name, address, imageUrl, menuId, geoLat, geoLon)
+
         companiesList.add(company)
     }
 
