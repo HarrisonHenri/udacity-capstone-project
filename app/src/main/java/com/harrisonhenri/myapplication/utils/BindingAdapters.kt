@@ -6,6 +6,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.harrisonhenri.myapplication.R
 import com.harrisonhenri.myapplication.companies.CompanyListAdapter
+import com.harrisonhenri.myapplication.favoritelist.FavoriteListAdapter
 import com.harrisonhenri.myapplication.menu.CategoryListAdapter
 import com.harrisonhenri.myapplication.repository.models.Category
 import com.harrisonhenri.myapplication.repository.models.Company
@@ -16,6 +17,13 @@ fun bindCompanyRecyclerView(recyclerView: RecyclerView, companyList: List<Compan
     val adapter = recyclerView.adapter as CompanyListAdapter
     adapter.submitList(companyList)
 }
+
+@BindingAdapter("favoriteCompanyList")
+fun bindFavoriteListRecyclerView(recyclerView: RecyclerView, favoriteCompanyList: List<Company>?) {
+    val adapter = recyclerView.adapter as FavoriteListAdapter
+    adapter.submitList(favoriteCompanyList)
+}
+
 
 @BindingAdapter("imageSource")
 fun bindImageViewImage(imageView: ImageView, url: String?) {

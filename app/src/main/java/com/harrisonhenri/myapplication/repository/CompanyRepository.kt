@@ -22,6 +22,10 @@ class CompanyRepository(private val database: CompaniesDatabase)
         companyEntities.toDomainModel()
     }
 
+    val favoriteCompanyList : LiveData<List<Company>> = Transformations.map(database.companyDao.getFavoriteCompanies()) { companyEntities ->
+        companyEntities.toDomainModel()
+    }
+
     val menuHash = MutableLiveData<HashMap<Int, Menu>>()
 
     suspend fun getCompanies(){
@@ -31,6 +35,16 @@ class CompanyRepository(private val database: CompaniesDatabase)
                 val parsedCompanies = parseCompaniesJsonResult(JSONObject(result))
                 database.companyDao.insertAll(*parsedCompanies.toDatabaseModel())
                 menuHash.postValue(parseMenuJsonResult(JSONObject(result)))
+            } catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+    }
+
+    suspend fun companyFavorite(companyId: String){
+        withContext(Dispatchers.IO){
+            try{
+                database.companyDao.companyFavorite(companyId)
             } catch (e: Exception){
                 e.printStackTrace()
             }

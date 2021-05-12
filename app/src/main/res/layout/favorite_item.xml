@@ -8,19 +8,6 @@
         <variable
             name="company"
             type="com.harrisonhenri.myapplication.repository.models.Company" />
-
-        <variable
-            name="clickListener"
-            type="com.harrisonhenri.myapplication.companies.ClickListener" />
-
-        <variable
-            name="favoriteListener"
-            type="com.harrisonhenri.myapplication.companies.ClickListener" />
-
-        <variable
-            name="distance"
-            type="com.harrisonhenri.myapplication.repository.models.Distance" />
-
     </data>
 
     <androidx.cardview.widget.CardView
@@ -57,22 +44,9 @@
                 android:layout_marginTop="@dimen/margin_normal"
                 android:textStyle="bold"
                 android:contentDescription=""
-                app:layout_constraintEnd_toStartOf="@+id/company_distance"
                 app:layout_constraintStart_toStartOf="@+id/company_logo"
                 app:layout_constraintTop_toBottomOf="@+id/company_logo"
                 tools:text="Shoppping Nova América" />
-
-            <TextView
-                android:id="@+id/company_distance"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@{distance.value}"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/text_size_medium"
-                app:layout_constraintEnd_toEndOf="@+id/company_logo"
-                app:layout_constraintTop_toBottomOf="@+id/company_logo"
-                tools:text="~ 250 km" />
 
             <TextView
                 android:id="@+id/company_address"
@@ -82,36 +56,10 @@
                 android:textStyle="italic"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/text_size_medium"
-                app:layout_constraintEnd_toEndOf="@id/company_distance"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/company_name"
                 app:layout_constraintStart_toStartOf="@+id/company_name"
                 tools:text="Av São Paulo" />
-
-            <Button
-                android:id="@+id/favorite_company"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:text="@string/button_favorite_star"
-                android:textColor="@color/colorSecondary"
-                app:layout_constraintStart_toStartOf="@+id/company_address"
-                app:layout_constraintEnd_toEndOf="@id/company_address"
-                android:drawableEnd="@drawable/ic_baseline_star_24"
-                android:paddingLeft="@dimen/margin_normal"
-                android:paddingRight="@dimen/margin_normal"
-                android:onClick="@{() -> favoriteListener.onClick(company.id)}"
-                android:drawableStart="@drawable/ic_baseline_star_24"
-                app:layout_constraintTop_toBottomOf="@+id/company_address" />
-
-            <View
-                android:id="@+id/clickableOverlay"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:onClick="@{() -> clickListener.onClick(company.menuId)}"
-                app:layout_constraintBottom_toBottomOf="@id/company_address"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

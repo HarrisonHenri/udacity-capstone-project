@@ -1,15 +1,11 @@
 package com.harrisonhenri.myapplication.companies
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -30,7 +26,6 @@ class CompanyList : Fragment() {
     private var userLatLong: LatLng? = null
     private lateinit var binding: FragmentCompanyListBinding
 
-
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
@@ -40,9 +35,12 @@ class CompanyList : Fragment() {
         binding = FragmentCompanyListBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        binding.companyRecycler.adapter = CompanyListAdapter(userLatLong, CompanyClickListener { menuId ->
+        binding.companyRecycler.adapter = CompanyListAdapter(userLatLong, ClickListener { menuId ->
             viewModel.companyClicked(menuId)
+        }, ClickListener { id ->
+            viewModel.onFavoriteClicked(id)
         })
+
 
         viewModel.isAuthenticated.observe(viewLifecycleOwner, Observer {
             if (it) {
@@ -60,10 +58,18 @@ class CompanyList : Fragment() {
             menu?.let {
                 val action = CompanyListDirections.actionCompanyToMenu(menu)
                 NavHostFragment.findNavController(this).navigate(action)
-                viewModel.doneNavigation()
+                viewModel.doneMenuNavigation()
             }
         })
 
+
+        viewModel.navigateToFavoriteList.observe(viewLifecycleOwner, { it ->
+            it?.let {
+                val action = CompanyListDirections.actionCompanyToFavoriteList()
+                NavHostFragment.findNavController(this).navigate(action)
+                viewModel.doneFavoriteListNavigation()
+            }
+        })
 
         return binding.root
     }
@@ -71,12 +77,14 @@ class CompanyList : Fragment() {
     @SuppressLint("MissingPermission")
     private fun getUserLocation(){
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-        if ((activity as AppCompatActivity?)!!.isPermissionGranted()){
+        if ((activity as AppCompatActivity?)!!.isPermissionGranted() && !::binding.isInitialized){
             fusedLocationClient.lastLocation.addOnSuccessListener {
                 it?.let {
                     userLatLong = LatLng(it.latitude, it.longitude)
-                    binding.companyRecycler.adapter = CompanyListAdapter(userLatLong, CompanyClickListener { menuId ->
+                    binding.companyRecycler.adapter = CompanyListAdapter(userLatLong, ClickListener { menuId ->
                         viewModel.companyClicked(menuId)
+                    }, ClickListener { id ->
+                        viewModel.onFavoriteClicked(id)
                     })
                 }
             }

@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
-import com.harrisonhenri.myapplication.R
 import com.harrisonhenri.myapplication.databinding.FragmentMenuBinding
 
 class Menu : Fragment() {

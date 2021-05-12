@@ -14,6 +14,11 @@
             app:destination="@id/menu"
             app:enterAnim="@anim/fragment_fade_enter"
             app:exitAnim="@anim/fragment_fade_exit" />
+        <action
+            android:id="@+id/action_company_to_favorite_list"
+            app:destination="@id/favoriteList"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
     </fragment>
     <fragment
         android:id="@+id/menu"
@@ -24,4 +29,9 @@
             android:name="Menu"
             app:argType="com.harrisonhenri.myapplication.repository.models.Menu" />
     </fragment>
+    <fragment
+        android:id="@+id/favoriteList"
+        android:name="com.harrisonhenri.myapplication.favoritelist.FavoriteList"
+        android:label="@string/favorite_list"
+        tools:layout="@layout/fragment_favorite_list" />
 </navigation>
